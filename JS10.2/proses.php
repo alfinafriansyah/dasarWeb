@@ -33,6 +33,24 @@ elseif ($aksi == 'ubah') {
         echo "ID tidak valid.";
     }
 }
+elseif ($aksi == 'hapus') {
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        
+        $query = "DELETE FROM anggota WHERE id=$id";
+        
+        if (mysqli_query($koneksi, $query)) {
+            header("Location: index1.php");
+            exit();
+        } else {
+            echo "Gagal menghapus data: " . mysqli_error($koneksi);
+        }
+    } else {
+        echo "ID tidak valid.";
+    }
+} else {
+    header("Location: index1.php");
+}
 
 mysqli_close($koneksi);
 ?>
