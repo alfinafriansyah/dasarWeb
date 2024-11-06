@@ -21,11 +21,12 @@ if (!empty($_SESSION['username'])) {
     }
     elseif (!empty($_GET['anggota'])) {
         $user_id = antiinjection($koneksi, $_POST['id']);
-        $username = antiinjection($koneksi, $_POST['nama']);
+        $nama = antiinjection($koneksi, $_POST['nama']);
         $jabatan = antiinjection($koneksi, $_POST['jabatan']);
         $jenis_kelamin = antiinjection($koneksi, $_POST['jenis_kelamin']);
         $alamat = antiinjection($koneksi, $_POST['alamat']);
         $no_telp = antiinjection($koneksi, $_POST['no_telp']);
+        $username = antiinjection($koneksi, $_POST['username']);
     
         $query_anggota = "UPDATE anggota SET 
                             nama = '$nama',
@@ -40,15 +41,12 @@ if (!empty($_SESSION['username'])) {
                 $combined_password = $salt . $_POST['password'];
                 $hashed_password = password_hash($combined_password, PASSWORD_BCRYPT);
     
-                $query_user = "UPDATE user SET 
-                                username = '$username', 
+                $query_user = "UPDATE user SET                                 username = '$username', 
                                 password = '$hashed_password', 
                                 salt = '$salt' 
                                WHERE id = '$user_id'";
             } else {
-                $query_user = "UPDATE user SET 
-                                username = '$username' 
-                               WHERE id = '$user_id'";
+                $query_user = "UPDATE user SET username = '$username' WHERE id = '$user_id'";
             }
             
             if (mysqli_query($koneksi, $query_user)) {
