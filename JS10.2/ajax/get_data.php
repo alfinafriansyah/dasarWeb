@@ -9,6 +9,9 @@ $sql = $db1->prepare($query);
 $sql->bind_param('i', $id);
 $sql->execute();
 $res1 = $sql->get_result();
+
+$h = [];
+
 while ($row = $res1->fetch_assoc()) {
     $h['id'] = $row["id"];
     $h['nama'] = $row["nama"];
@@ -16,6 +19,7 @@ while ($row = $res1->fetch_assoc()) {
     $h['alamat'] = $row["alamat"];
     $h['no_telp'] = $row["no_telp"];
 }
+
 echo json_encode($h);
 
 $db1->close();
