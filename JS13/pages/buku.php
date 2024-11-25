@@ -61,21 +61,35 @@
                             <?php
                             require_once __DIR__ . '/../lib/Connection.php';
 
-                            function getKategori() {
-                                global $db;
+                            function getKategori()
+                            {
+                                global $db, $use_driver;
                                 $query = "SELECT * FROM m_kategori ORDER BY kategori_nama ASC";
-                                $result = $db->query($query);
                                 $kategori = [];
-                                while ($row = $result->fetch_assoc()) {
-                                    $kategori[] = $row;
+
+                                if ($use_driver == 'mysql') {
+                                    $result = $db->query($query);
+                                    while ($row = $result->fetch_assoc()) {
+                                        $kategori[] = $row;
+                                    }
+                                } else if ($use_driver == 'sqlsrv') {
+                                    $stmt = sqlsrv_query($db, $query);
+                                    if ($stmt === false) {
+                                        $errors = sqlsrv_errors();
+                                        die("SQL Server Query Error: " . $errors[0]['message']);
+                                    }
+                                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                        $kategori[] = $row;
+                                    }
                                 }
+
                                 return $kategori;
                             }
-                            
+
                             $kategori = getKategori();
 
                             if (!empty($kategori)):
-                                foreach ($kategori as $k):?>
+                                foreach ($kategori as $k): ?>
                                     <option value="<?= htmlspecialchars($k['kategori_id']); ?>">
                                         <?= htmlspecialchars($k['kategori_nama']); ?>
                                     </option>

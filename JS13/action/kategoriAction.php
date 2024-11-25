@@ -17,15 +17,13 @@ if ($act == 'load') {
     $data = $kategori->getData();
     $result = [];
     $i = 1;
-    while ($row = $data->fetch_assoc()) {
+    foreach ($data as $row) {
         $result['data'][] = [
             $i,
             $row['kategori_kode'],
             $row['kategori_nama'],
-            '<button class="btn btn-sm btn-warning" 
-onclick="editData(' . $row['kategori_id'] . ')"><i class="fa fa-edit"></i></button>  
-         <button class="btn btn-sm btn-danger" 
-onclick="deleteData(' . $row['kategori_id'] . ')"><i class="fa fa-trash"></i></button>'
+            '<button class="btn btn-sm btn-warning" onclick="editData(' . $row['kategori_id'] . ')"><i class="fa fa-edit"></i></button>  
+            <button class="btn btn-sm btn-danger" onclick="deleteData(' . $row['kategori_id'] . ')"><i class="fa fa-trash"></i></button>'
         ];
         $i++;
     }
@@ -45,7 +43,6 @@ if ($act == 'save') {
         'kategori_kode' => antiSqlInjection($_POST['kategori_kode']),
         'kategori_nama' => antiSqlInjection($_POST['kategori_nama'])
     ];
-
     $kategori = new KategoriModel();
     $kategori->insertData($data);
 
